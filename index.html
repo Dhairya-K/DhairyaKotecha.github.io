@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Dhairya Kotecha | Astrophysics</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
+<style>
+body {
+  margin: 0;
+  font-family: 'Inter', sans-serif;
+  color: #eaeaea;
+  background: black;
+  overflow-x: hidden;
+}
+canvas {
+  position: fixed;
+  top: 0; left: 0;
+  z-index: -1;
+}
+section {
+  max-width: 900px;
+  margin: auto;
+  padding: 80px 20px;
+}
+h1, h2 {
+  color: #ffffff;
+}
+a {
+  color: #7db9ff;
+  text-decoration: none;
+}
+.project, .lab {
+  margin-bottom: 25px;
+}
+.footer {
+  text-align: center;
+  opacity: 0.6;
+  padding-bottom: 40px;
+}
+</style>
+</head>
+
+<body>
+<canvas id="stars"></canvas>
+
+<section>
+<h1>Dhairya Kotecha</h1>
+<p>Undergraduate in Engineering Physics, IIT Roorkee<br>
+Astrophysics | Theory & Observation | Computational Modeling</p>
+</section>
+
+<section>
+<h2>About Me</h2>
+<p>
+I am deeply interested in astrophysics at the junction of theoretical and observational work, where physical models can be built and tested using real data. I want to make my own theories, code my own models, and test them with observations — and also work the other way around, starting from observational data and developing theories to understand what we see.
+</p>
+<p>
+I am particularly drawn to extreme environments such as supernovae, black holes, neutron stars, pulsars, and the early universe, where fundamental physics is pushed to its limits. I am also fascinated by telescopes, their engineering, data collection, and how we decode the universe. I am also interested in the search for exoplanets and exomoons, and in figuring out dark matter and the origin of our universe. I am still relatively new to the field and would love to participate in all of astrophysics and grow my interest further. 
+</p>
+<p>
+My experience at the Radio Astronomy Winter School at IUCAA confirmed my desire to pursue research in astrophysics. The school helped me work with real data and understand how theory, observation, and instrumentation come together.
+</p>
+</section>
+
+<section>
+<h2>Projects</h2>
+
+<div class="project">
+<h3>Big Bang Nucleosynthesis and the Lithium Problem</h3>
+<p>Study of light element formation and Tsallis statistics in early universe nucleosynthesis.</p>
+<a href="Big_Bang_Nucleosynthesis_and_the_statistical_foundations_behind_it.pdf">Report</a>
+</div>
+
+<div class="project">
+<h3>Galaxy Distance Determination using TRGB</h3>
+<p>PSF photometry, CMD construction, TRGB detection using FITS data from GROWTH-India Telescope.</p>
+<a href="Distance_determination_using_the_TRGB_method.pdf">Report</a>
+</div>
+
+<div class="project">
+<h3>Fourier Analysis of Multi-Eclipsing Stellar Systems</h3>
+<p>Lomb–Scargle periodogram on simulated triple-star light curves.</p>
+<a href="Fourier_Analysis_of_Light_Curves_in_a_Multi_Eclipsing_Stellar_System.pdf">Report</a>
+</div>
+
+<div class="project">
+<h3>Galactic HI Observations</h3>
+<p>21 cm line analysis, spiral arm detection, Galactic rotation curve.</p>
+<a href="Galactic_H1_Observations.pdf">Report</a>
+</div>
+
+<div class="project">
+<h3>Eclipsing Binaries with PHOEBE (Krittika IITB)</h3>
+<p>Modeling and simulation of eclipsing binaries using PHOEBE </p>
+<a href="KSP_5_0_EB_Project_Report.pdf">Report</a>
+</div>
+</section>
+
+<section>
+<h2>Labs & Instrumentation</h2>
+
+<div class="lab">
+<p>Superheterodyne Receiver Analysis — <a href="Super_Heterodyne_Receiver.pdf">Report</a></p>
+</div>
+
+<div class="lab">
+<p>Receiver Characteristics — <a href="Receiver_Characteristics.pdf">Report</a></p>
+</div>
+
+<div class="lab">
+<p>Telescope Beam Width — <a href="Telescope_Beam_Width.pdf">Report</a></p>
+</div>
+</section>
+<section>
+<h2>Astrophotography</h2>
+
+<div class="gallery">
+
+<div>
+  <img src="images/astro/leo_triplet.jpg" alt="Leo Triplet">
+  <div class="caption">
+    <b>Leo Triplet (M65, M66, NGC 3628)</b><br>
+    Celestron Omni XLT 120 | Sony ZV-E10 II | iOptron CEM40G<br>
+    55×20s, ISO 800 — SiriL + Photoshop
+  </div>
+</div>
+
+<div>
+  <img src="images/astro/blood_moon.jpg" alt="Blood Moon">
+  <div class="caption">
+    <b>Blood Moon</b><br>
+    Single frame, Sept 7 Lunar Eclipse<br>
+    Redcat 51 | Sony A6400 | Lightroom
+  </div>
+</div>
+
+</div>
+</section>
+
+<section>
+<h2>Quotes</h2>
+<p>
+A Spectrum is a goldmine of astronomical information, and every time you think you’ve milked it for all it’s worth, you find more clues encoded in it...
+</p>
+<p><i>~ Max Tegmark, Our Mathematical Universe</i></p>
+</section>
+
+<section>
+<h2>Contact</h2>
+<p>Email: dhairya_k@ph.iitr.ac.in<br>
+GitHub: <a href="https://github.com/Dhairya-K">Dhairya-K</a></p>
+</section>
+
+.gallery {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 20px;
+  margin-top: 30px;
+}
+
+.gallery img {
+  width: 100%;
+  border-radius: 6px;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.gallery img:hover {
+  transform: scale(1.03);
+  box-shadow: 0 0 20px rgba(125,185,255,0.4);
+}
+
+.caption {
+  font-size: 0.9em;
+  opacity: 0.8;
+  margin-top: 6px;
+}
+
+
+<div class="footer">
+<p>© Dhairya Kotecha</p>
+</div>
+
+
+<script>
+const canvas = document.getElementById('stars');
+const ctx = canvas.getContext('2d');
+let w = canvas.width = window.innerWidth;
+let h = canvas.height = window.innerHeight;
+let stars = Array(200).fill().map(() => ({
+  x: Math.random()*w,
+  y: Math.random()*h,
+  r: Math.random()*1.5
+}));
+function draw() {
+  ctx.clearRect(0,0,w,h);
+  ctx.fillStyle = "white";
+  stars.forEach(s => {
+    ctx.beginPath();
+    ctx.arc(s.x, s.y, s.r, 0, Math.PI*2);
+    ctx.fill();
+  });
+}
+function animate() {
+  draw();
+  requestAnimationFrame(animate);
+}
+animate();
+</script>
+
+</body>
+</html>
