@@ -237,102 +237,102 @@ const ctx = canvas.getContext('2d');
 function resize() {
   canvas.width = window.innerWidth;
   canvas.height = window.innerHeight;
-  draw();
+  generateSky();
 }
 window.addEventListener("resize", resize);
 
-/* ---------- Natural Star Field ---------- */
-function drawStars() {
-  const w = canvas.width;
-  const h = canvas.height;
+function gaussianRandom(mean = 0, stdDev = 1) {
+  let u = 1 - Math.random();
+  let v = 1 - Math.random();
+  return mean + stdDev * Math.sqrt(-2.0 * Math.log(u)) *
+         Math.cos(2.0 * Math.PI * v);
+}
 
-  const starCount = 350;
+function drawStar(x, y, radius, alpha, color = "255,255,255") {
+  ctx.beginPath();
+  ctx.arc(x, y, radius, 0, Math.PI * 2);
+  ctx.fillStyle = `rgba(${color},${alpha})`;
+  ctx.fill();
+}
 
-  for (let i = 0; i < starCount; i++) {
-    const x = Math.random() * w;
-    const y = Math.random() * h;
+/* ----------- Background Random Stars ----------- */
+function generateBackgroundStars(count) {
+  for (let i = 0; i < count; i++) {
+    const x = Math.random() * canvas.width;
+    const y = Math.random() * canvas.height;
 
-    // More small stars, fewer bright ones
-    const r = Math.pow(Math.random(), 3) * 1.8;
+    const radius = Math.pow(Math.random(), 3) * 1.8; // magnitude-like
+    const alpha = 0.5 + Math.random() * 0.5;
 
-    ctx.beginPath();
-    ctx.arc(x, y, r, 0, Math.PI * 2);
-    ctx.fillStyle = "rgba(255,255,255,0.9)";
-    ctx.fill();
+    drawStar(x, y, radius, alpha);
   }
 }
 
-/* ---------- Smaller Random Globular Cluster ---------- */
-function drawCluster() {
-  const w = canvas.width;
-  const h = canvas.height;
+/* ----------- Globular Cluster ----------- */
+function generateCluster() {
+  const cx = Math.random() * canvas.width;
+  const cy = Math.random() * canvas.height;
 
-  // Random position on load
-  const centerX = Math.random() * w;
-  const centerY = Math.random() * h;
+  const spread = 40 + Math.random() * 50;
+  const stars = 80 + Math.random() * 120;
 
-  const clusterRadius = 70;     // smaller
-  const starCount = 90;         // fewer stars
+  for (let i = 0; i < stars; i++) {
+    const x = gaussianRandom(cx, spread * 0.3);
+    const y = gaussianRandom(cy, spread * 0.3);
 
-  for (let i = 0; i < starCount; i++) {
-    const angle = Math.random() * Math.PI * 2;
+    const radius = Math.pow(Math.random(), 2) * 2;
+    const alpha = 0.7 + Math.random() * 0.3;
 
-    // Gaussian-like radial distribution
-    const radius = clusterRadius * Math.sqrt(-2 * Math.log(Math.random())) * 0.4;
-
-    const x = centerX + Math.cos(angle) * radius;
-    const y = centerY + Math.sin(angle) * radius;
-
-    const r = Math.pow(Math.random(), 2) * 2;
-
-    ctx.beginPath();
-    ctx.arc(x, y, r, 0, Math.PI * 2);
-    ctx.fillStyle = "rgba(255,255,255,0.95)";
-    ctx.fill();
+    drawStar(x, y, radius, alpha);
   }
 }
 
-/* ---------- Smaller Diffuse Elliptical Galaxy ---------- */
-function drawGalaxy() {
-  const w = canvas.width;
-  const h = canvas.height;
+/* ----------- Diffuse Galaxy ----------- */
+function generateGalaxy() {
+  const cx = Math.random() * canvas.width;
+  const cy = Math.random() * canvas.height;
 
-  const cx = Math.random() * w;
-  const cy = Math.random() * h;
+  const angle = Math.random() * Math.PI;
+  const a = 80 + Math.random() * 80;   // major axis
+  const b = 25 + Math.random() * 40;   // minor axis
+  const stars = 200 + Math.random() * 300;
 
-  const galaxyWidth = 140;   // smaller
-  const galaxyHeight = 60;   // elliptical
-  const starCount = 250;
+  for (let i = 0; i < stars; i++) {
 
-  const rotation = Math.random() * Math.PI;
+    let x = gaussianRandom(0, a);
+    let y = gaussianRandom(0, b);
 
-  ctx.save();
-  ctx.translate(cx, cy);
-  ctx.rotate(rotation);
+    // rotate ellipse
+    const xr = x * Math.cos(angle) - y * Math.sin(angle);
+    const yr = x * Math.sin(angle) + y * Math.cos(angle);
 
-  for (let i = 0; i < starCount; i++) {
+    const brightness = Math.exp(-(x*x)/(a*a) - (y*y)/(b*b));
 
-    // Gaussian distribution
-    const x = (Math.random() - 0.5) * galaxyWidth;
-    const y = (Math.random() - 0.5) * galaxyHeight;
-
-    const brightness = Math.exp(-(x*x)/(galaxyWidth*galaxyWidth) 
-                      -(y*y)/(galaxyHeight*galaxyHeight));
-
-    ctx.beginPath();
-    ctx.arc(x, y, Math.random() * 1.2, 0, Math.PI * 2);
-    ctx.fillStyle = `rgba(180,200,255,${brightness * 0.25})`;
-    ctx.fill();
+    drawStar(
+      cx + xr,
+      cy + yr,
+      Math.random() * 1.5,
+      brightness * 0.4,
+      "200,220,255"
+    );
   }
-
-  ctx.restore();
 }
 
-function draw() {
+function generateSky() {
   ctx.clearRect(0, 0, canvas.width, canvas.height);
-  drawStars();
-  drawGalaxy();
-  drawCluster();
+
+  generateBackgroundStars(400 + Math.random() * 200);
+
+  // 0–2 clusters
+  const clusterCount = Math.floor(Math.random() * 3);
+  for (let i = 0; i < clusterCount; i++) {
+    generateCluster();
+  }
+
+  // 50% chance galaxy appears
+  if (Math.random() > 0.5) {
+    generateGalaxy();
+  }
 }
 
 resize();
