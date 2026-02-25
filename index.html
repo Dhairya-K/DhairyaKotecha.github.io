@@ -241,6 +241,8 @@ function resize() {
 }
 window.addEventListener("resize", resize);
 
+/* ---------- Utilities ---------- */
+
 function gaussianRandom(mean = 0, stdDev = 1) {
   let u = 1 - Math.random();
   let v = 1 - Math.random();
@@ -255,82 +257,108 @@ function drawStar(x, y, radius, alpha, color = "255,255,255") {
   ctx.fill();
 }
 
-/* ----------- Background Random Stars ----------- */
+/* ---------- Background Field ---------- */
+
 function generateBackgroundStars(count) {
   for (let i = 0; i < count; i++) {
     const x = Math.random() * canvas.width;
     const y = Math.random() * canvas.height;
 
-    const radius = Math.pow(Math.random(), 3) * 1.8; // magnitude-like
-    const alpha = 0.5 + Math.random() * 0.5;
+    const radius = Math.pow(Math.random(), 3) * 1.6; // slightly sharper
+    const alpha = 0.6 + Math.random() * 0.4;
 
     drawStar(x, y, radius, alpha);
   }
 }
 
-/* ----------- Globular Cluster ----------- */
-function generateCluster() {
-  const cx = Math.random() * canvas.width;
-  const cy = Math.random() * canvas.height;
+/* ---------- Edge Position Generator ---------- */
 
-  const spread = 40 + Math.random() * 50;
-  const stars = 80 + Math.random() * 120;
+function randomEdgePosition() {
+  const w = canvas.width;
+  const h = canvas.height;
+
+  const edgeMarginX = w * 0.25;
+  const edgeMarginY = h * 0.25;
+
+  const edge = Math.floor(Math.random() * 4);
+
+  if (edge === 0) return { x: Math.random() * w, y: Math.random() * edgeMarginY }; // top
+  if (edge === 1) return { x: Math.random() * w, y: h - Math.random() * edgeMarginY }; // bottom
+  if (edge === 2) return { x: Math.random() * edgeMarginX, y: Math.random() * h }; // left
+  return { x: w - Math.random() * edgeMarginX, y: Math.random() * h }; // right
+}
+
+/* ---------- Globular Cluster ---------- */
+
+function generateCluster() {
+  const pos = randomEdgePosition();
+  const spread = 30 + Math.random() * 40;
+  const stars = 100 + Math.random() * 120;
 
   for (let i = 0; i < stars; i++) {
-    const x = gaussianRandom(cx, spread * 0.3);
-    const y = gaussianRandom(cy, spread * 0.3);
+    const x = gaussianRandom(pos.x, spread * 0.28); // slightly tighter
+    const y = gaussianRandom(pos.y, spread * 0.28);
 
-    const radius = Math.pow(Math.random(), 2) * 2;
-    const alpha = 0.7 + Math.random() * 0.3;
+    const radius = Math.pow(Math.random(), 2) * 1.8;
+    const alpha = 0.75 + Math.random() * 0.25;
 
     drawStar(x, y, radius, alpha);
   }
 }
 
-/* ----------- Diffuse Galaxy ----------- */
+/* ---------- Elliptical Galaxy with Bulge ---------- */
+
 function generateGalaxy() {
-  const cx = Math.random() * canvas.width;
-  const cy = Math.random() * canvas.height;
+  const pos = randomEdgePosition();
 
   const angle = Math.random() * Math.PI;
-  const a = 80 + Math.random() * 80;   // major axis
-  const b = 25 + Math.random() * 40;   // minor axis
-  const stars = 200 + Math.random() * 300;
+  const a = 70 + Math.random() * 70;  // major axis
+  const b = 20 + Math.random() * 35;  // minor axis
+  const stars = 350 + Math.random() * 300;
 
   for (let i = 0; i < stars; i++) {
 
-    let x = gaussianRandom(0, a);
-    let y = gaussianRandom(0, b);
+    let x = gaussianRandom(0, a * 0.9); // slightly tighter = sharper
+    let y = gaussianRandom(0, b * 0.9);
 
-    // rotate ellipse
     const xr = x * Math.cos(angle) - y * Math.sin(angle);
     const yr = x * Math.sin(angle) + y * Math.cos(angle);
 
-    const brightness = Math.exp(-(x*x)/(a*a) - (y*y)/(b*b));
+    const r2 = (x*x)/(a*a) + (y*y)/(b*b);
+    const brightness = Math.exp(-r2 * 1.1); // 10% sharper falloff
 
     drawStar(
-      cx + xr,
-      cy + yr,
-      Math.random() * 1.5,
-      brightness * 0.4,
-      "200,220,255"
+      pos.x + xr,
+      pos.y + yr,
+      Math.random() * 1.4,
+      brightness * 0.5,
+      "210,225,255"
     );
   }
+
+  // central bulge
+  for (let i = 0; i < 120; i++) {
+    const bx = gaussianRandom(pos.x, a * 0.15);
+    const by = gaussianRandom(pos.y, b * 0.15);
+
+    drawStar(bx, by, Math.random() * 1.8, 0.6, "255,255,255");
+  }
 }
+
+/* ---------- Sky Generator ---------- */
 
 function generateSky() {
   ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-  generateBackgroundStars(400 + Math.random() * 200);
+  generateBackgroundStars(450 + Math.random() * 200);
 
-  // 0–2 clusters
   const clusterCount = Math.floor(Math.random() * 3);
   for (let i = 0; i < clusterCount; i++) {
     generateCluster();
   }
 
-  // 50% chance galaxy appears
-  if (Math.random() > 0.5) {
+  // 80% chance galaxy appears
+  if (Math.random() < 0.8) {
     generateGalaxy();
   }
 }
