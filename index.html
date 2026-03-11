@@ -356,7 +356,7 @@ function generateGalaxy() {
 function generateSky() {
   ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-  generateBackgroundStars(450 + Math.random() * 200);
+  generateBackgroundStars(250 + Math.random() * 200);
 
   const clusterCount = Math.floor(Math.random() * 3);
   for (let i = 0; i < clusterCount; i++) {
